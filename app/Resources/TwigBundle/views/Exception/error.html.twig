@@ -1,0 +1,20 @@
+{# app/Resources/TwigBundle/views/Exception/error.html.twig #}
+
+{% extends "ApbBaseBundle:Default:base.html.twig" %}
+
+{% block content %}
+    <h1>{{ status_code }} {{ status_text }}</h1>
+    <br/>
+
+    <p>
+        <strong>Il y a une erreur ou la page demandée n'a pas été trouvée. ("{{ status_code }} {{ status_text }}")</strong>
+    </p>
+    <p>
+        Vous pouvez tenter de <a href="javascript:history.back();">revenir</a> sur la page d'où vous venez ou aller à la page d'entrée de l'application sur laquelle vous étiez:
+        <ul>
+            <li><a href="{{ path('apb_diatheque_default_index') }}">Diathèque</a></li>
+            <li><a href="{{ path('apb_monuments_default_index') }}">Monuments</a></li>
+            <li><a href="{{ path('apb_typika_default_index') }}">Typika</a></li>
+        </ul>
+    </p>
+{% endblock content %}

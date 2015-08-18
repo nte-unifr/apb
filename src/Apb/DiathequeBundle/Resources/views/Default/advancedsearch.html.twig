@@ -1,0 +1,334 @@
+{# src/Apb/DiathequeBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends "ApbDiathequeBundle:Default:index.html.twig" %}
+
+{% block diatheque_content %}
+
+<h1>Moteur de recherche</h1>
+
+
+<a href="{{ path('apb_diatheque_default_standardsearch') }}">Standard</a>&nbsp;|&nbsp;<strong>Avancé</strong>
+
+<script type="text/javascript">
+var cat = function(n, id, value) {
+    select = '<select class="form" name="categorie'+n+'_'+(id)+'" style="width:100%">';
+    {% for cat in categories %}
+    select += '<option value="{{ cat.id }}"';
+    if (value == '{{ cat.id }}') {
+        select += ' selected="selected"';
+    }
+    select += '>{{ cat.categorie }}</option>';
+    {% endfor %}
+    select += '</select>';
+    return select;
+}
+var nbcoul = function(id, value) {
+    select = '<select class="form" name="nbCouleur_'+(id)+'" style="width:100%">';
+    {% for nbc in nbcouleurs %}
+    select += '<option value="{{ nbc.id }}"';
+    if (value == '{{ nbc.id }}') {
+        select += ' selected="selected"';
+    }
+    select += '>{{ nbc.nbcouleur }}</option>';
+    {% endfor %}
+    select += '</select>';
+    return select;
+}
+
+
+
+function deleteEntry(id) {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  //when we eliminate the first operator, remove the operand of the second operator
+  if (elements[1].id == id) {
+    var op = document.getElementById("logic_cat" + elements[2].id.substring(5));
+    op.parentNode.removeChild(op);
+  }
+  //remove node
+  var entry = document.getElementById(id);
+  entry.parentNode.removeChild(entry);
+  //do not allow to eliminate the last element: hide the button!
+  checkVisibility();
+}
+
+function checkVisibility() {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  var numberOfElements = 0;
+  for (var e = 0; e < elements.length; e++)
+    if (elements[e] != '')
+      numberOfElements++;
+    if (elements.length == 2) {
+      var lastID = elements[1].id.substring(5);
+      document.getElementById("image" + lastID).style.visibility = "hidden";
+    }else{
+      var id;
+      for (var e = 1; e < elements.length; e++) {
+        id = elements[e].id.substring(5);
+        document.getElementById("image" + id).style.visibility = "visible";
+      }
+    }
+  }
+
+  function createEntry() {
+    var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+    var id = 0;
+    if (elements.length > 1) {
+      id = parseInt(elements[elements.length - 1].id.substring(5)) + 1;
+    }
+    var entry = document.createElement('tr');
+    entry.id = "entry" + id;
+    entry.style.verticalAlign="top";
+  //logical operator
+  var logic = document.createElement('td');
+  entry.appendChild(logic);
+  if (elements.length > 1) {
+    var logicMenu = createSelect('logic_cat' + id, [ "Et", "Ou","Sauf"], null, null);
+    logicMenu.name = 'logic_cat' + id;
+    logic.appendChild(logicMenu);
+  }
+  //category
+  var category = document.createElement('td');
+  entry.appendChild(category);
+  category.appendChild(createSelect('cat' + id, ["Fiche n°", "Catégorie 1", "Catégorie 2", "Monument", "Description", "NB / couleur", "Référence"], "keywordCell" + id));
+  //field
+  var field = document.createElement('td');
+  field.id = "keywordCell" + id;
+  entry.appendChild(field);
+  var input = document.createElement('input');
+  input.className = "form";
+  input.name = "fiche_cat" + id;
+  input.style.width="100%";
+  input.type = "text";
+  field.appendChild(input);
+  //remove
+  var remove = document.createElement('td');
+  entry.appendChild(remove);
+  var image = document.createElement('img');
+  image.id = "image" + id;
+  remove.align = "right";
+  remove.appendChild(image);
+  image.src = "{{ asset('bundles/apbbase/images/micro_delete.png') }}";
+  image.className = "buttonImage";
+  image.onclick = function() {
+    deleteEntry(entry.id);
+  };
+  //append new entry
+  document.getElementById('menuType0').appendChild(entry);
+  checkVisibility();
+}
+
+function updateKeywordField(type, id, parentId) {
+  if (type == "Catégorie 1" || type == "Catégorie 2" || type == "NB / couleur") {
+
+    var node = document.getElementById(parentId);
+    if (type == "Catégorie 1") {
+      node.innerHTML = cat(1, id);
+    }
+    else if (type == "Catégorie 2") {
+      node.innerHTML = cat(2, id);
+    }
+    else {
+      node.innerHTML = nbcoul(id);
+    }
+  }else{
+    if (type == "Fiche n°")
+      type = 'fiche';
+    else if (type == "Monument")
+      type = 'monument';
+    else if (type == "Description")
+      type = 'description';
+    else
+      type = 'reference';
+    document.getElementById(parentId).innerHTML = '<input class="form" type="text" name="' + type + "_" + id + '" style="width:100%;">';
+  }
+}
+
+function createSelect(id, values, target) {
+  var select = document.createElement('select');
+  select.className = "form";
+  select.id = id;
+  select.size=1;
+  select.style.width="100%";
+  if (target != null) {
+    select.onchange = function() {
+      updateKeywordField(select.options[select.selectedIndex].value, id, target);
+    };
+  }
+  var option;
+  for (var i = 0; i < values.length; i++) {
+    option = document.createElement('option');
+    if (i == 0)
+      option.selected = "selected";
+    option.innerHTML = values[i];
+    select.appendChild(option);
+  }
+  return select;
+}
+
+function resetQuery() {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  createEntry();
+  for (var i = elements.length; i > 0; i--) {
+    deleteEntry(elements[1].id);
+  }
+}
+</script>
+
+<form method="post" action="{{ path('apb_diatheque_default_advancedsearch') }}">
+  <table  style="width:100%" align="center" cellspacing="3px" cellpadding="3px">
+    <tr>
+      <td class="searchByLabel"><h2>Composez vos critères de recherche</h2></td>
+    </tr>
+    <tr>
+      <td>
+        <div id="container0">
+          <table style="width:100%;" cellspacing="5px" id="menuType0">
+            <tr>
+              <td class="searchBySecondLevelLabel" style="width:15%;">Condition</td>
+              <td class="searchBySecondLevelLabel" style="width:40%;">Chercher dans</td>
+              <td class="searchBySecondLevelLabel" style="width:40%;">Mot-clé</td>
+              <td class="searchBySecondLevelLabel" style="width:5%;"></td>
+            </tr>
+        {% set count = 0 %}
+        {% set pos = 0 %}
+        {% set last_field = '' %}
+        {% set rank = 0 %}
+        {% for k,v in data %}
+            {% set rank = count // 6 %}
+            {% set count_subcateg = 0 %}
+            {% if attribute(v, 'field') == 'logic' %}
+                {% set nextrank = rank + 1 %}
+                {% set logic = '<select id="logic_cat' ~ nextrank ~ '" class="form" size="1" style="width: 100%;" name="logic_cat' ~ nextrank ~ '"><option' %}
+                {% if attribute(v, 'value') == 'Ou' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>Ou</option><option' %}
+                {% if attribute(v, 'value') == 'Et' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>Et</option><option' %}
+                {% if attribute(v, 'value') == 'Sauf' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>Sauf</option></select>' %}
+            {% else %}
+            <tr id="entry{{ rank }}" style="vertical-align: top;">
+                <td>
+                    {% if logic is defined %}
+                        {{ logic|raw }}
+                    {% endif %}
+                </td>
+                <td>
+                    <select id="cat{{ rank }}" class="form" size="1" style="width: 100%;" onchange="updateKeywordField(options[selectedIndex].value, 'cat{{ rank }}', 'keywordCell{{ rank }}' );">
+                        <option {% if (attribute(v, 'field') == 'fiche' ) %} selected="selected"{% endif %}>Fiche n°</option>
+                        <option {% if (attribute(v, 'field') == 'categorie1' ) %} selected="selected"{% endif %}>Catégorie 1</option>
+                        <option {% if (attribute(v, 'field') == 'categorie2' ) %} selected="selected"{% endif %}>Catégorie 2</option>
+                        <option {% if (attribute(v, 'field') == 'monument' ) %} selected="selected"{% endif %}>Monument</option>
+                        <option {% if (attribute(v, 'field') == 'description' ) %} selected="selected"{% endif %}>Description</option>
+                        <option {% if (attribute(v, 'field') == 'nbCouleur' ) %} selected="selected"{% endif %}>NB / couleur</option>
+                        <option {% if (attribute(v, 'field') == 'reference' ) %} selected="selected"{% endif %}>Référence</option>
+                    </select>
+                </td>
+                <td id="keywordCell{{ rank }}">
+                    {% if ( attribute(v, 'field') == 'categorie1' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = cat(1, '{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'categorie2' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = cat(2, '{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'nbCouleur' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = nbcoul('{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% else %}
+                    <input class="form" type="text" name="{{ attribute(v, 'field') }}_cat{{ rank }}" style="width: 100%;" value="{{ attribute(v, 'value') }}">
+                    {% endif %}
+                </td>
+                <td align="right">
+                    <img id="image{{ rank }}" class="buttonImage" src="{{ asset('bundles/apbbase/images/micro_delete.png') }}" style="visibility: visible;" onclick="deleteEntry('entry{{ rank }}');">
+                </td>
+            </tr>
+            {% endif %}
+            {% set count = count + 3 %}
+            {% set last_field = attribute(v, 'field') %}
+        {% endfor %}
+          </table>
+          <table style="width:100%;">
+            <tr>
+              <td width="20%">
+                <div class="buttonImage" style="width:150px;margin:10px 10px;"onclick="createEntry();">
+                  <img src="{{ asset('bundles/apbbase/images/mini_add.png') }}"> Ajouter condition
+                </div>
+              </td>
+              <td width="20%">
+                <div class="buttonImage" style="width:150px;margin:10px 10px;"onclick="resetQuery();">
+                  <img src="{{ asset('bundles/apbbase/images/clear.png') }}"> Effacer requête
+                </div>
+              </td>
+              <td width="60%" align="right">
+                <input class="btn btn-primary btn-small" value="Chercher" type="submit" name="searchEntry" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+{% if data|length == 0 %}<script type="text/javascript">createEntry();</script>{% endif %}
+
+    <h1><a name="results"></a>R&eacute;sultats de la recherche</h1>
+    Pour votre recherche, il y a <b>{% if ids is defined %}{{ ids|length }}{% else %}0{% endif %}</b> r&eacute;sultat(s)
+    <br /><br />
+
+{% if ids|length > 0 %}
+    <a href="{{ path('apb_diatheque_default_advancedsearch', {'page': page, 'print': 'print'}) }}" class="btn-secondary btn">Version imprimable</a>
+
+    {% if pager is defined and pager.haveToPaginate %}
+    <br /><br />
+    <div class="row-fluid">
+        <div class="span12">{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_diatheque_default_advancedsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}</div>
+    </div>
+    {% endif %}
+
+    <div class="row-fluid">
+      {% for dia in dias %}
+      <div class="span6">
+        <table cellpadding="3" class="ficheTable">
+          <tr>
+            <td colspan="2" class="ficheTitle">
+              <table cellpadding="0" border="0" width="100%" align="center">
+                <tr>
+                  <td style="text-align:left">Fiche {{ dia.fiche }}</td>
+                  <td style="text-align:right;width:30px;">
+                    <a class="ficheLink" name="46535" href="{{ path('apb_diatheque_default_fiche', {'id': dia.id}) }}">d&eacute;tails</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="height:40px; align:top;">{{ dia.monument }}</td>
+            <td rowspan="2" style="width:70px;">
+              <a target="_blank" href="{% path dia.image, 'reference' %}">
+                {% if dia.image != null %}<img border="0" src="{% path dia.image, 'small' %}" width="66px" height="90px">{% endif %}
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="height:80px; align:top;"><i>{{ dia.description }}</i></td>
+          </tr>
+        </table>
+      </div>
+        {% if loop.index is divisibleby(2) %}
+    </div><div class="row-fluid">
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if pager is defined and pager.haveToPaginate %}
+    <br /><br />
+    <div class="row-fluid">
+        <div class="span12">{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_diatheque_default_advancedsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}</div>
+    </div>
+    {% endif %}
+    
+{% endif %}
+
+{% endblock %}

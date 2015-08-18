@@ -1,0 +1,110 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>Search engine</h1>
+<br/>
+<table  style="width:100%" align="center" cellspacing="0px" cellpadding="0px">
+  <tr>
+    <td style="border-bottom:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_artefactsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_artefacts.png') }}"/>
+          </div>
+          Search by <strong>artefact</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-bottom:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_documentsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_documents.png') }}"/>
+          </div>
+          Search by <strong>document</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-left:dotted 3px #e4e6e6;border-top:dotted 3px #e4e6e6;border-right:dotted 3px #e4e6e6; text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_synthesissearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_synthesis.png') }}"/>
+          </div>
+          Search by <strong>synthesis</strong>
+        </div>
+      </a>
+    </td>
+  </tr>
+</table>
+
+
+<div class="boite">
+    <form id="doc_search" method="post" {{ form_enctype(form_synth) }}>
+      <div class="row-fluid navy">
+        <div class="span12">
+          <h2>Select a synthesis</h2>
+          {{ form_widget(form_synth.greek, { 'attr': {'class': 'span10'} }) }}
+        </div>
+        <input class="btn btn-primary btn-small" value="Search" type="submit" name="searchdoc"/>
+      </div>
+    </form>
+
+    <h2>Search all fields using a keyword</h2>
+
+    <form action="{{ path('apb_typika_default_synthesissearch', { 'all': 0 }) }}" id="doc_search" method="post" {{ form_enctype(form_synth) }}>
+      <div class="row-fluid navy">
+        <div class="span12">
+          {{ form_widget(form_synth.definition, { 'attr': {'class': 'span10'} }) }}
+        </div>
+      </div>
+      <div class="row-fluid navy">
+        <div class="span12">
+            <input class="btn btn-primary btn-small" value="Search" type="submit" name="searchauth"/>
+        </div>
+      </div>
+    </form>
+
+    <a href="{{ path('apb_typika_default_synthesissearch', {'all': true}) }}">&gt;&gt; Show all synthesis</a>
+</div>
+
+    {%if syntheses is defined %}
+    <h1>{{ syntheses|length }} result(s)</h1>
+
+    <div class="row-fluid">
+      <div class="span12">
+        <table cellpadding="3" align="center" class="ficheTable">
+          <tbody>
+            {% set last_title = '' %}
+            {% for synthese in syntheses %}                         {# ci-dessous test supplémentaire car pb avec les accents... #}
+            {% if last_title != synthese.greek|slice(0,1)|lower and not (synthese.greek|slice(0, 1) in ['e', 'é', 'è', 'ê', 'ë'] and last_title in ['e', 'é', 'è', 'ê', 'ë']) %}
+            {% set count = 0 %}
+            <tr class="ficheTitle">
+              <td colspan="4">{{ synthese.greek|upper|slice(0,1) }}</td>
+            </tr>
+            <tr>
+            {% endif %}
+            {% set last_title = synthese.greek|slice(0,1)|lower %}
+            {% set count = count + 1 %}
+              <td>
+                <div class="resultEntry">
+    {#              <a href="{{ path('apb_typika_default_synthese', {'id': synthese.id}) }}"><b>no. {{ synthese.id }}</b> - {{ synthese.biblio }}</a> #}
+                  <a href="{{ path('apb_typika_default_synthese', {'id': synthese.id}) }}">{{ synthese.greek }}</a>
+                </div>
+              </td>
+            {% if count % 4 == 0 %}
+            </tr>
+            <tr>
+            {% endif %}
+            {% if last_title != synthese.greek|slice(0, 1)|lower and not (synthese.greek|slice(0, 1) in ['e', 'é', 'è', 'ê', 'ë'] and last_title in ['e', 'é', 'è', 'ê', 'ë']) %}
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+{% endblock %}

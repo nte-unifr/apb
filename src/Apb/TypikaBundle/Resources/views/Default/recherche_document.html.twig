@@ -1,0 +1,106 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/recherche_document.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>Search engine</h1>
+<br/>
+<table  style="width:100%" align="center" cellspacing="0px" cellpadding="0px">
+  <tr>
+    <td style="border-bottom:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_artefactsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_artefacts.png') }}"/>
+          </div>
+          Search by <strong>artefact</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-left:dotted 3px #e4e6e6;border-top:dotted 3px #e4e6e6;border-right:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_documentsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_documents.png') }}"/>
+          </div>
+          Search by <strong>document</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-bottom:dotted 3px #e4e6e6; text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_synthesissearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_synthesis.png') }}"/>
+          </div>
+          Search by <strong>synthesis</strong>
+        </div>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<div class="boite">
+
+    <form id="doc_search" method="post" {{ form_enctype(form_doc) }}>
+      <div class="row-fluid navy">
+        <div class="span12">
+          <h2>Select a document</h2>
+          {{ form_widget(form_doc.nom, { 'attr': {'class': 'span10'} }) }}
+        </div>
+        <input class="btn btn-primary btn-small" value="Search" type="submit" name="searchdoc"/>
+      </div>
+    </form>
+
+
+    <h2>Select documents by category</h2>
+
+    <form action="{{ path('apb_typika_default_documentsearch', { 'all': 0 }) }}" id="doc_search" method="post" {{ form_enctype(form_auth) }}>
+      <div class="row-fluid navy">
+        <div class="span12">
+          <h4>Issuing authority</h4>
+          {{ form_widget(form_auth.authority, { 'attr': {'class': 'span10 option_upper'} }) }}
+        </div>
+      </div>
+      <div class="row-fluid navy">
+        <div class="span12">
+          <h4>Type of document</h4>
+          {{ form_widget(form_auth.type, { 'attr': {'class': 'span10 option_upper'} }) }}
+        </div>
+        <input class="btn btn-primary btn-small" value="Search" type="submit" name="searchauth"/>
+      </div>
+      {{ form_rest(form_auth) }}
+    </form>
+
+    <a href="{{ path('apb_typika_default_documentsearch', {'all': true}) }}">&gt;&gt; Show all documents</a>
+
+</div>
+
+    {% if documents is defined %}
+    <h1><a name="results"></a>{{ ids|length }} result(s)</h1>
+
+    <div class="row-fluid">
+      <div class="span12">
+        {% if pager and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_documentsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}{% endif %}
+        <table cellpadding="3" align="center" class="ficheTable">
+          <tbody>
+            {% for document in documents %}
+            <tr class="ficheTitle">
+              <td>{{ document.nom }}</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="resultEntry">
+                  <a href="{{ path('apb_typika_default_document', {'id': document.id}) }}"><b>no. {{ document.id }}</b> - {{ document.biblio }}</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if pager and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_documentsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}{% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

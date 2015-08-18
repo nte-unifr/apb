@@ -1,0 +1,514 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/recherche_artefact.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+
+<h1>Search engine</h1>
+<br/>
+<table  style="width:100%" align="center" cellspacing="0px" cellpadding="0px">
+  <tr>
+    <td style="border-left:dotted 3px #e4e6e6;border-top:dotted 3px #e4e6e6;border-right:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_artefactsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_artefacts.png') }}"/>
+          </div>
+          Search by <strong>artefact</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-bottom:dotted 3px #e4e6e6;  text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_documentsearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_documents.png') }}"/>
+          </div>
+          Search by <strong>document</strong>
+        </div>
+      </a>
+    </td>
+    <td style="border-bottom:dotted 3px #e4e6e6; text-align:center; padding: 5px;">
+      <a href="{{ path('apb_typika_default_synthesissearch') }}">
+        <div>
+          <div class="searchBoxImage">
+            <img  align="center" border="0" src="{{ asset('bundles/apbtypika/images/mini_synthesis.png') }}"/>
+          </div>
+          Search by <strong>synthesis</strong>
+        </div>
+      </a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+
+var documents = function(id, value) {
+  select = '<select class="form" name="document_'+(id)+'" style="width:100%">';
+  {% for doc in document %}
+  select = select + '<option value="{{ doc.id }}"';
+  if(value == '{{doc.id}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ doc.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+var greek = function(id, value) {
+  select = '<select class="form" name="greek_'+(id)+'" style="width:100%">';
+  {% for gr in greek %}
+  select = select + '<option value="{{ gr.nom }}"';
+  if(value == '{{gr.nom}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ gr.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+var greek_trans = function(id, value) {
+  select = '<select class="form" name="greektrans_'+(id)+'" style="width:100%">';
+  {% for grtr in greek_trans %}
+  select = select + '<option value="{{ grtr.nom }}"';
+  if(value == '{{grtr.nom}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ grtr.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+var french = function(id, value) {
+  select = '<select class="form" name="french_'+(id)+'" style="width:100%">';
+  {% for fre in french %}
+  select = select + '<option value="{{ fre.nom }}"';
+  if(value == '{{fre.nom}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ fre.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+var english = function(id, value) {
+  select = '<select class="form" name="english_'+(id)+'" style="width:100%">';
+  {% for eng in english %}
+  select = select + '<option value="{{ eng.nom }}"';
+  if(value == '{{eng.nom}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ eng.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+var categories = function(id, value) {
+  select = '<select class="form" id="category_'+(id)+'" name="category_'+(id)+'" style="width:100%" onchange="subcategories(\''+id+'\');">';
+  {% for cat in categories %}
+  select = select + '<option value="{{ cat.nom }}"';
+  if(value == '{{cat.nom}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ cat.nom }}</option>';
+  {% endfor %}
+  select = select + '</select><select name="subcategories_'+(id)+'" id="subcategories_'+(id)+'" style="width:100%"></select>';
+//  select = select + '</select>';
+  return select;
+}
+
+var subcategories_options = function(id, value, pos) {
+
+  // cas des sous-catégories
+//  select = 'sub categories: <select name="subcategories_'+(id)+'" id="subcategories_'+(id)+'" style="width:100%">';
+  select = '';
+  options = '';
+  switch(pos)
+  {
+  {% for p in 0 .. subcategories|length %}
+      case '{{ p }}':
+      {% if subcategories[p] is defined %}
+        {% for cat in (subcategories[p]) %}
+              options = options + '<option value="{{ cat.nom }}"';
+              if(value == '{{cat.nom}}') { 
+                options = options + ' selected="selected"';
+              }
+              options = options + '>{{ cat.nom }}</option>';
+        {% endfor %}
+        break;
+      {% endif %}
+  {% endfor %}
+  }
+//  select = select + options + '</select>';
+  select = select + options;
+  return select;
+}
+
+var materials = function(id, value) {
+  select = '<select class="form" name="material_'+(id)+'" style="width:100%">';
+  {% for mat in materials %}
+  select = select + '<option value="{{ mat.id }}"';
+  if(value == '{{mat.id}}') { 
+    select = select + ' selected="selected"';
+  }
+  select = select + '>{{ mat.nom }}</option>';
+  {% endfor %}
+  select = select + '</select>';
+  return select;
+}
+
+function deleteEntry(id) {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  //when we eliminate the first operator, remove the operand of the second operator
+  if (elements[1].id == id) {
+    var op = document.getElementById("logic_" + elements[2].id.substring(5));
+    op.parentNode.removeChild(op);
+  }
+  //remove node
+  var entry = document.getElementById(id);
+  entry.parentNode.removeChild(entry);
+  //do not allow to eliminate the last element: hide the button!
+  checkVisibility();
+}
+
+function checkVisibility() {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  var numberOfElements = 0;
+  for (var e = 0; e < elements.length; e++)
+    if (elements[e] != '')
+      numberOfElements++;
+    if (elements.length == 2) {
+      var lastID = elements[1].id.substring(5);
+      document.getElementById("image" + lastID).style.visibility = "hidden";
+    }else{
+      var id;
+      for (var e = 1; e < elements.length; e++) {
+        id = elements[e].id.substring(5);
+        document.getElementById("image" + id).style.visibility = "visible";
+      }
+    }
+  }
+
+  function createEntry() {
+    var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+    var id = 0;
+    if (elements.length > 1) {
+      id = parseInt(elements[elements.length - 1].id.substring(5)) + 1;
+    }
+    var entry = document.createElement('tr');
+    entry.id = "entry" + id;
+    entry.style.verticalAlign="top";
+  //logical operator
+  var logic = document.createElement('td');
+  entry.appendChild(logic);
+  if (elements.length > 1) {
+    var logicMenu = createSelect('logic_' + id, ["And", "And not", "Or"], null, null);
+    logicMenu.name = 'logic_cat' + id;
+    logic.appendChild(logicMenu);
+  }
+  //category
+  var category = document.createElement('td');
+  entry.appendChild(category);
+  category.appendChild(createSelect('cat' + id, ["ALL FIELDS", "ID", "Document", "Greek term", "Greek term transliterated", "French translation", "English translation", "Greek context", "Comments", "Category", "Material"], "keywordCell" + id));
+  //field
+  var field = document.createElement('td');
+  field.id = "keywordCell" + id;
+  entry.appendChild(field);
+  var input = document.createElement('input');
+  input.className = "form";
+  input.name = "fiche_cat" + id;
+  input.style.width="100%";
+  input.type = "text";
+  field.appendChild(input);
+  //remove
+  var remove = document.createElement('td');
+  entry.appendChild(remove);
+  var image = document.createElement('img');
+  image.id = "image" + id;
+  remove.align = "right";
+  remove.appendChild(image);
+  image.src = "{{ asset('bundles/apbbase/images/micro_delete.png') }}";
+  image.className = "buttonImage";
+  image.onclick = function() {
+    deleteEntry(entry.id);
+  };
+  //append new entry
+  document.getElementById('menuType0').appendChild(entry);
+  checkVisibility();
+}
+
+function updateKeywordField(type, id, parentId) {
+  var node = document.getElementById(parentId);
+  switch (type) {
+    case "ALL FIELDS":
+        node.innerHTML = '<input class="form" type="text" name="fiche_"' + id + '" style="width:100%;">';
+        break;
+    case "ID":
+        node.innerHTML = '<input class="form" type="text" name="id_"' + id + '" style="width:100%;">';
+        break;
+    case "Document":
+        node.innerHTML = documents(id);
+        break;
+    case "Greek term":
+        node.innerHTML = greek(id);
+        break;
+    case "Greek term transliterated":
+        node.innerHTML = greek_trans(id);
+        break;
+    case "French translation":
+        node.innerHTML = french(id);
+        break;
+    case "English translation":
+        node.innerHTML = english(id);
+        break;
+    case "Greek context":
+        node.innerHTML = '<input class="form" type="text" name="context_"' + id + '" style="width:100%;">';
+        break;
+    case "Comments":
+        node.innerHTML = '<input class="form" type="text" name="comments_"' + id + '" style="width:100%;">';
+        break;
+    case "Category":
+        node.innerHTML = categories(id);
+        break;
+    case "Material":
+        node.innerHTML = materials(id);
+        break;
+  }
+}
+
+function createSelect(id, values, target) {
+  var select = document.createElement('select');
+  select.className = "form";
+  select.id = id;
+  select.size=1;
+  select.style.width="100%";
+  if (target != null) {
+    select.onchange = function() {
+      updateKeywordField(select.options[select.selectedIndex].value, id, target);
+    };
+  }
+  var option;
+  for (var i = 0; i < values.length; i++) {
+    option = document.createElement('option');
+    if (i == 0)
+      option.selected = "selected";
+    option.innerHTML = values[i];
+    select.appendChild(option);
+  }
+  return select;
+}
+
+function resetQuery() {
+  var elements = document.getElementById('menuType0').getElementsByTagName('tr');
+  createEntry();
+  for (var i = elements.length; i > 0; i--) {
+    deleteEntry(elements[1].id);
+  }
+}
+
+function subcategories(id) {
+    var nom_categorie = $('#category_'+id).val();
+    $.ajax({
+        url: "{{ path('apb_typika_default_subcategories') }}",
+        type: 'POST',
+        data: {'nom': nom_categorie},
+        dataType: 'json',
+        success: function(json){
+            $('#subcategories_'+id).fadeOut(200);
+            $('#subcategories_'+id).html('');
+            $('#subcategories_'+id).fadeIn(200);
+            $.each(json, function(index, value) {
+                            $('#subcategories_'+id).append('<option value="'+ value.nom +'">'+ value.nom +'</option>');
+                        });
+            }
+    });
+}
+</script>
+
+
+<form method="post" action="{{ path('apb_typika_default_artefactsearch', { 'page': 1, 'print': 0 }) }}" style="border-left:dotted 3px #e4e6e6; border-right:dotted 3px #e4e6e6; border-bottom:dotted 3px #e4e6e6; padding: 5px;">
+  <table  style="width:100%" align="center" cellspacing="3px" cellpadding="3px">
+    <tr>
+      <td class="searchByLabel"><h2>Search for artefacts</h2></td>
+    </tr>
+    <tr>
+      <td>
+        <div id="container0">
+          <table style="width:100%;" cellspacing="5px" id="menuType0">
+            <tr>
+              <td class="searchBySecondLevelLabel" style="width:15%;">condition</td>
+              <td class="searchBySecondLevelLabel" style="width:40%;">look in</td>
+              <td class="searchBySecondLevelLabel" style="width:40%;">keyword</td>
+              <td class="searchBySecondLevelLabel" style="width:5%;"></td>
+            </tr>
+        {% set count = 0 %}
+        {% set pos = 0 %}
+        {% set last_field = '' %}
+        {% set rank = 0 %}
+        {% for k,v in request_data %}
+            {% set rank = count // 6 %}
+            {% set count_subcateg = 0 %}
+            {% if attribute(v, 'field') == 'logic' %}
+                {% set nextrank = rank + 1 %}
+                {% set logic = '<select id="logic_' ~ nextrank ~ '" class="form" size="1" style="width: 100%;" name="logic_cat' ~ nextrank ~ '"><option' %}
+                {% if attribute(v, 'value') == 'Or' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>Or</option><option' %}
+                {% if attribute(v, 'value') == 'And' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>And</option><option' %}
+                {% if attribute(v, 'value') == 'And not' %}
+                    {% set logic = logic ~ ' selected="selected"' %}
+                {% endif %}
+                {% set logic = logic ~ '>And not</option></select>' %}
+            {% elseif attribute(v, 'field') == 'category' %} {# si on a une catégorie, on doit traiter le cas des sous-catégories #}
+                {% set category_rank = rank %}
+                {% set category_value = attribute(v, 'value') %}
+            {% elseif attribute(v, 'field') == 'subcategories' or last_field == 'category' %}
+            <tr id="entry{{ rank }}" style="vertical-align: top;">
+                <td>
+                    {% if logic is defined %}
+                        {{ logic|raw }}
+                    {% endif %}
+                </td>
+                <td>
+                    <select id="cat{{ rank }}" class="form" size="1" style="width: 100%;" onchange="updateKeywordField(options[selectedIndex].value, 'cat{{ rank }}', 'keywordCell{{ rank }}' );">
+                        <option {% if (attribute(v, 'field') == 'fiche' ) %} selected="selected"{% endif %}>ALL FIELDS</option>
+                        <option {% if (attribute(v, 'field') == 'id' ) %} selected="selected"{% endif %}>ID</option>
+                        <option {% if (attribute(v, 'field') == 'document' ) %} selected="selected"{% endif %}>Document</option>
+                        <option {% if (attribute(v, 'field') == 'greek' ) %} selected="selected"{% endif %}>Greek term</option>
+                        <option {% if (attribute(v, 'field') == 'greektrans' ) %} selected="selected"{% endif %}>Greek term transliterated</option>
+                        <option {% if (attribute(v, 'field') == 'french' ) %} selected="selected"{% endif %}>French translation</option>
+                        <option {% if (attribute(v, 'field') == 'english' ) %} selected="selected"{% endif %}>English translation</option>
+                        <option {% if (attribute(v, 'field') == 'context' ) %} selected="selected"{% endif %}>Greek context</option>
+                        <option {% if (attribute(v, 'field') == 'comments' ) %} selected="selected"{% endif %}>Comments</option>
+                        <option {% if (attribute(v, 'field') in ['category', 'subcategories'] ) %} selected="selected"{% endif %}>Category</option>
+                        <option {% if (attribute(v, 'field') == 'material' ) %} selected="selected"{% endif %}>Material</option>
+                    </select>
+                </td>
+                <td id="keywordCell{{ rank }}">
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = categories('cat{{ rank }}', "{{ category_value }}");</script>
+                        <script type="text/javascript"> document.getElementById('subcategories_cat{{ rank }}').innerHTML += subcategories_options('cat{{ rank }}', "{{ attribute(v, 'value') }}", "{{ pos }}");</script>
+                        {% set pos = pos + 1 %}
+                </td>
+                <td align="right">
+                    <img id="image{{ rank }}" class="buttonImage" src="{{ asset('bundles/apbbase/images/micro_delete.png') }}" style="visibility: visible;" onclick="deleteEntry('entry{{ rank }}');">
+                </td>
+            </tr>
+            {% else %}
+            <tr id="entry{{ rank }}" style="vertical-align: top;">
+                <td>
+                    {% if logic is defined %}
+                        {{ logic|raw }}
+                    {% endif %}
+                </td>
+                <td>
+                    <select id="cat{{ rank }}" class="form" size="1" style="width: 100%;" onchange="updateKeywordField(options[selectedIndex].value, 'cat{{ rank }}', 'keywordCell{{ rank }}' );">
+                        <option {% if (attribute(v, 'field') == 'fiche' ) %} selected="selected"{% endif %}>ALL FIELDS</option>
+                        <option {% if (attribute(v, 'field') == 'id' ) %} selected="selected"{% endif %}>ID</option>
+                        <option {% if (attribute(v, 'field') == 'document' ) %} selected="selected"{% endif %}>Document</option>
+                        <option {% if (attribute(v, 'field') == 'greek' ) %} selected="selected"{% endif %}>Greek term</option>
+                        <option {% if (attribute(v, 'field') == 'greektrans' ) %} selected="selected"{% endif %}>Greek term transliterated</option>
+                        <option {% if (attribute(v, 'field') == 'french' ) %} selected="selected"{% endif %}>French translation</option>
+                        <option {% if (attribute(v, 'field') == 'english' ) %} selected="selected"{% endif %}>English translation</option>
+                        <option {% if (attribute(v, 'field') == 'context' ) %} selected="selected"{% endif %}>Greek context</option>
+                        <option {% if (attribute(v, 'field') == 'comments' ) %} selected="selected"{% endif %}>Comments</option>
+                        <option {% if (attribute(v, 'field') in ['category', 'subcategories'] ) %} selected="selected"{% endif %}>Category</option>
+                        <option {% if (attribute(v, 'field') == 'material' ) %} selected="selected"{% endif %}>Material</option>
+                    </select>
+                </td>
+                <td id="keywordCell{{ rank }}">
+                    {% if ( attribute(v, 'field') == 'document' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = documents('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'greek' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = greek('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'greektrans' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = greek_trans('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'french' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = french('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'english' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = english('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'category' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = categories('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% elseif ( attribute(v, 'field') == 'material' ) %}
+                        <script type="text/javascript"> document.getElementById('keywordCell{{ rank }}').innerHTML = materials('cat{{ rank }}', "{{ attribute(v, 'value') }}");</script>
+                    {% else %}
+                    <input class="form" type="text" name="{{ attribute(v, 'field') }}_cat{{ rank }}" style="width: 100%;" value="{{ attribute(v, 'value') }}">
+                    {% endif %}
+                </td>
+                <td align="right">
+                    <img id="image{{ rank }}" class="buttonImage" src="{{ asset('bundles/apbbase/images/micro_delete.png') }}" style="visibility: visible;" onclick="deleteEntry('entry{{ rank }}');">
+                </td>
+            </tr>
+            {% endif %}
+            {% set count = count + 3 %}
+            {% set last_field = attribute(v, 'field') %}
+        {% endfor %}
+          </table>
+          <table style="width:100%;">
+            <tr>
+              <td width="20%">
+                <div class="buttonImage" style="width:150px;margin:10px 10px;"onclick="createEntry();">
+                  <img src="{{ asset('bundles/apbbase/images/mini_add.png') }}"> Add 1 more condition
+                </div>
+              </td>
+              <td width="20%">
+                <div class="buttonImage" style="width:150px;margin:10px 10px;" onclick="resetQuery();">
+                  <img src="{{ asset('bundles/apbbase/images/clear.png') }}"> Clear query
+                </div>
+              </td>
+              <td width="60%" align="right">
+                <input class="btn btn-primary btn-small" value="Search" type="submit" name="searchArtefact"/>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<a href="{{ path('apb_typika_default_artefactsearch', {'all': true}) }}">&gt;&gt; Show all artefacts</a>
+
+{% if request_data|length == 0 %}<script type="text/javascript">createEntry();</script>{% endif %}
+
+    {% if artefacts is defined %}
+    <h1><a name="results"></a>Result(s)</h1>
+    <b>{{ ids|length }}</b> result(s)
+
+    <div class="row-fluid">
+      <div class="span12">
+        {% if pager and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_artefactsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}{% endif %}
+        <table cellpadding="3" align="center" class="ficheTable">
+          <tbody>
+            {% set last_title = '' %}
+            {% for artefact in artefacts %}
+            {% if last_title != artefact.greek %}
+            <tr class="ficheTitle">
+              <td>{{ artefact.greek }}</td>
+            </tr>
+            {% endif %}
+            {% set last_title = artefact.greek %}
+            <tr>
+              <td>
+                <div class="resultEntry">
+                  <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.context|striptags }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if pager and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_artefactsearch', 'page_template': '<a href="%href%#results">%text%</a>' }) }}{% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

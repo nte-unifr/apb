@@ -1,0 +1,33 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+
+
+
+<div align="left">
+    <img src="{{ asset('bundles/apbtypika/images/icons/faq.png') }}" alt="chercher une fiche">
+</div>
+<div align="left">
+    <h1>Help</h1>
+</div>
+
+<div class="row-fluid">
+    <div class="row12"><h3>TABLE DES MATIERES</h3></div>
+    <div class="row12">
+    {% for faq in faqs %}
+        {% if faq.title == faq.title|upper %}<strong>{% endif %}<a href="#ancre{{ faq.id }}">{{ faq.title }}</a>{% if faq.title == faq.title|upper %}</strong>{% endif %}<br />
+    {% endfor %}
+    </div>
+</div>
+
+{% for faq in faqs %}
+<div class="row-fluid">
+    
+    <div class="row12"><h3><a name="ancre{{ faq.id }}"></a>{{ faq.title }}</h3></div>
+    <div class="row12">{{ faq.description|raw|nl2br }}</div>
+</div>
+{% endfor %}
+
+{% endblock %}

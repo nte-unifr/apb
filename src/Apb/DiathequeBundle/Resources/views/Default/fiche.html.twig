@@ -1,0 +1,65 @@
+{# src/Apb/DiathequeBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends print ? "ApbDiathequeBundle:Default:print.html.twig" : "ApbDiathequeBundle:Default:index.html.twig" %}
+
+{% block diatheque_content %}
+
+<table border="0">
+	<tr>
+	  <td>
+		    <!-- fiche personnelle -->
+		    		  			<h1>{% if not print %}Fiche d&eacute;taill&eacute;e{% else %}Version imprimable{% endif %}</h1>
+	  			<br>
+	  	</td>
+	</tr>
+</table>
+
+{% if is_granted("IS_AUTHENTICATED_FULLY") %}
+    <center><strong>{{ app.user.username }}</strong>: <a href="{{ path('admin_apb_diatheque_dia_edit', {'id': dia.id}) }}" target="_blank">Editer la fiche </a></center>
+{% endif %}
+
+<table cellspacing="3" cellpadding="3" border="0">
+	<tr>
+	  	<td width="35%" align="left"><strong>Fiche</strong></td>
+	  	<td>{{ dia.fiche }}</td>
+	</tr>
+	<tr>
+	  	<td><strong>Cat&eacute;gorie 1</strong></td>
+	  	<td>{{ dia.categorie1 }}</td>
+	</tr>
+	<tr>
+	  	<td><strong>Cat&eacute;gorie 2</strong></td>
+	  	<td>{{ dia.categorie2 }}</td>
+	</tr>
+	<tr>
+	  	<td><strong>Monument</strong></td>
+	  	<td>{{ dia.monument }}</td>
+	</tr>
+	<tr>
+		<td><strong>Description</strong></td>
+		<td>{{ dia.description }}</td>
+	</tr>
+	<tr>
+			<tr>
+		<td><strong>Nb couleur</strong></td>
+		<td>{{ dia.nbcouleur }}</td>
+	</tr>
+	<tr>
+  		<td><strong>R&eacute;f&eacute;rence</strong></td>
+  		<td>{{ dia.reference }}</td>
+	</tr>
+</table>
+<br /><br />
+{% if dia.image != null %}
+<a href="{% path dia.image, 'reference' %}">{% media dia.image, 'small' %}</a><br /><br />
+{% endif %}
+
+{% if not print %}
+<a href="{{ path('apb_diatheque_default_search') }}" class="btn-secondary btn">Retour aux résultats</a>
+<a href="{{ path('apb_diatheque_default_fiche', {'id': dia.id, 'print': 'print'}) }}" class="btn-secondary btn">Imprimer la fiche</a>
+{% else %}
+<input type=button value=Imprimer onclick="window.print()">
+{% endif %}
+
+<br /><br />
+{% endblock %}

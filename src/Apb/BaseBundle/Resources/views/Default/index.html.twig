@@ -1,0 +1,10 @@
+{% extends "ApbBaseBundle:Default:base.html.twig" %}
+{% block content %}
+<h1>{{ page.title }}</h1>
+<br/>
+
+{{ page.introduction|raw }}
+
+{{ page.text|raw }}
+
+{% endblock content %}

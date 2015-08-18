@@ -1,0 +1,14 @@
+{# src/Apb/MonumentsBundle/Resources/views/form.html.twig #}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+<div {{ block('widget_container_attributes') }}>
+{% for child in form %}
+    <label class="{{ (multiple ? 'checkbox' : 'radio') ~ (inline is defined and inline ? ' inline' : '') }}">
+        {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
+        {{ child.vars.label|trans({}, translation_domain) }}
+    </label>
+{% endfor %}
+</div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}

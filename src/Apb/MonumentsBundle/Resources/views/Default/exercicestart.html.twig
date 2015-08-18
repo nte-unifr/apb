@@ -1,0 +1,34 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/exercicestart.html.twig #}
+
+{% extends "ApbMonumentsBundle:Default:index.html.twig" %}
+
+
+{% form_theme form _self %}
+{% block choice_widget_expanded %}
+{% spaceless %}
+<ul>
+<div {{ block('widget_container_attributes') }} class="row12">
+{% for child in form %}
+    <label class="{{ (multiple ? 'checkbox' : 'radio') ~ (inline is defined and inline ? ' inline' : '') }}">
+        {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
+        {{ child.vars.label|trans({}, translation_domain) }}
+    </label>
+{% endfor %}
+</div>
+</ul>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+
+{% block monuments_content %}
+
+<h1>Exercice > Identification des monuments</h1>
+
+<div class="row-fluid">
+    <div class="span12">
+
+        {{ form(form) }}
+    </div>
+</div>
+
+{% endblock %}

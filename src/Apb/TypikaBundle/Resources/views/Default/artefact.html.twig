@@ -1,0 +1,173 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/artefact.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<style>
+.ficheTitle {
+  font-weight: bold;
+  color: #006699;
+  background-color: #F0F6F9;
+}
+.ficheSubtitle {
+  margin-top: 10px;
+  color: #444444;
+  font-weight: bold;
+}
+</style>
+<h2>Typika&nbsp;&gt;&nbsp;<a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.greek }}</a>&nbsp;&gt;&nbsp;Details of artefact</h2>
+<br>
+<div align="center">
+  <h1>{{ artefact.greek }} (N°{{ artefact.id }})</h1>
+
+  {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+      <strong>{{ app.user.username }}</strong>: <a href="{{ path('admin_apb_typika_artefact_edit', {'id': artefact.id}) }}" target="_blank">Editer la fiche </a>
+  {% endif %}
+
+</div>
+<br>
+<!--img src="images/artefact.jpg" alt="artefact" /-->
+<table cellpadding="3" align="center" class="ficheTable">
+  <tbody>
+    <tr class="ficheTitle">
+      <td>Document</td>
+    </tr>
+    <tr>
+      <td>
+        <table cellpadding="1" style="width:100%">
+          <tbody>
+            <tr>
+              <td style="width:50%">
+                <div class="ficheSubtitle">Document's name</div>
+                {{ artefact.document.nom }} (<a href="{{ path('apb_typika_default_document', {'id': artefact.document.id}) }}">view document</a>)
+              </td>
+              <td style="width:50%">
+                <div class="ficheSubtitle">Reference</div>
+                {{ artefact.reference }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="ficheSubtitle">Greek term</div>
+                {{ artefact.greek }}
+                &nbsp;(<a href="{{ path('apb_typika_default_synthese', {'id': artefact.synthese.id}) }}">view synthesis</a>)
+              </td>
+              <td>
+                <div class="ficheSubtitle">Greek term transliterated</div>
+                {{ artefact.greekTrans }}
+              </td>
+            </tr>
+            <tr>
+              <td style="width:50%">
+                <div class="ficheSubtitle">French translation</div>
+                {{ artefact.french }}
+              </td>
+              <td style="width:50%">
+                <div class="ficheSubtitle">English translation</div>
+                {{ artefact.english }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr class="ficheTitle">
+      <td>Context (Greek)</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="ficheText">
+          {{ artefact.context|raw }}
+        </div>
+      </td>
+    </tr>
+    <tr class="ficheTitle">
+      <td>Comments</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="ficheText">
+          {{ artefact.comments|raw|nl2br }}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table style="width:100%;" cellspacing="5px" id="referenceList">
+          <tbody>
+            <tr>
+              <td><ul>
+              {% for reference in artefact.references %}
+                {% if reference.object is defined and reference.object != null %}
+                    [{{ reference.position }}] <a href="{{ path('apb_typika_default_' ~ reference.object, {'id': reference.idobject}) }}">{{ reference.text }}</a><br />
+				{% else %}
+				    [{{ reference.position }}] {{ reference.text }}<br />
+				{% endif %}
+              {% endfor %}
+              </ul></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr class="ficheTitle">
+      <td>Materials</td>
+    </tr>
+    <tr>
+      <td>
+        {% if artefact.material != null %}
+            {{ artefact.material.nom }}
+        {% endif %}
+        {% if artefact.material2 != null %}
+            / {{ artefact.material2.nom }}
+        {% endif %}
+        {% if artefact.material3 != null %}
+            / {{ artefact.material3.nom }}
+        {% endif %}
+      </td>
+    </tr>
+    <tr class="ficheTitle">
+      <td>Main category / subcategory</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="ficheText">
+          {% if artefact.category != null %}{{ artefact.category.nom }} / {{ artefact.category.nom2 }}{% endif %}
+        </div>
+      </td>
+    </tr>
+    <tr class="ficheTitle">
+      <td>Updated at</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="ficheText">
+          {{ artefact.updatedAt|date() }}
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="row-fluid" align="center">
+    <div class="span4">
+        {% if(prev) %}
+        <a href="{{ path('apb_typika_default_artefact', { 'id': prev }) }}">
+            <<<
+        </a>
+        {% else %}
+            <span style="color:#aaa"><<<</span>
+        {% endif %}
+    </div>
+    <div class="span4"><a href="{{ path('apb_typika_default_search') }}#results">Back to results</a></div>
+    <div class="span4">
+        {% if(next) %}
+        <a href="{{ path('apb_typika_default_artefact', { 'id': next }) }}">
+            >>>
+        </a>
+        {% else %}
+            <span style="color:#aaa">>>></span>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

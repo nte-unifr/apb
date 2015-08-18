@@ -1,0 +1,41 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/result_syntheses.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>{{ syntheses|length }} result(s)</h1>
+
+<div class="row-fluid">
+  <div class="span12">
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        {% set last_title = '' %}
+        {% for synthese in syntheses %}
+        {% if last_title != synthese.greek|first %}
+        {% set count = 0 %}
+        <tr class="ficheTitle">
+          <td colspan="4">{% filter upper %}{{ synthese.greek|first }}{% endfilter %}</td>
+        </tr>
+        <tr>
+        {% endif %}
+        {% set last_title = synthese.greek|first %}
+        {% set count = count + 1 %}
+          <td>
+            <div class="resultEntry">
+{#              <a href="{{ path('apb_typika_default_synthese', {'id': synthese.id}) }}"><b>no. {{ synthese.id }}</b> - {{ synthese.biblio }}</a> #}
+              <a href="{{ path('apb_typika_default_synthese', {'id': synthese.id}) }}">{{ synthese.greek }}</a>
+            </div>
+          </td>
+        {% if count % 4 == 0 %}
+        </tr>
+        <tr>
+        {% endif %}
+        {% if last_title != synthese.greek|first %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

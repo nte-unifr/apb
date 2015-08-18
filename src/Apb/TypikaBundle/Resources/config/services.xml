@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="apb.typika.admin.artefact" class="Apb\TypikaBundle\Admin\ArtefactAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Artefact" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Artefact</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.synthese" class="Apb\TypikaBundle\Admin\SyntheseAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Synthèses" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Synthese</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.typika.admin.document" class="Apb\TypikaBundle\Admin\DocumentAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Document" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Document</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.categories" class="Apb\TypikaBundle\Admin\CategoriesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Catégories" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Category</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.materiaux" class="Apb\TypikaBundle\Admin\MateriauxAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Matériaux" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Material</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.fonction" class="Apb\TypikaBundle\Admin\FonctionAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Fonction" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Fonction</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.pages" class="Apb\TypikaBundle\Admin\PagesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Typika Pages" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Pages</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.actualites" class="Apb\TypikaBundle\Admin\ActualitesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Actualites" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Actualites</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.faq" class="Apb\TypikaBundle\Admin\FaqAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="FAQ" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Faq</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.bibliography" class="Apb\TypikaBundle\Admin\BibliographyAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Bibliography" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Bibliography</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.sources" class="Apb\TypikaBundle\Admin\SourcesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="Sources" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Sources</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.referenceSynthese" class="Apb\TypikaBundle\Admin\ReferenceSyntheseAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="References Syntheses" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\ReferenceSynthese</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="apb.typika.admin.reference" class="Apb\TypikaBundle\Admin\ReferenceAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Typika" label="References Artefacts" />
+            <argument />
+            <argument>Apb\TypikaBundle\Entity\Reference</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+        <service id="twig.extension.text" class="Twig_Extensions_Extension_Text">
+            <tag name="twig.extension" />
+        </service>
+
+        <service id="twig.extension.debug" class="Twig_Extensions_Extension_Debug">
+            <tag name="twig.extension" />
+        </service>
+
+    </services>
+
+</container>

@@ -1,0 +1,116 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/exercice.html.twig #}
+
+{% extends "ApbMonumentsBundle:Default:index.html.twig" %}
+
+
+{% form_theme form _self %}
+{% block choice_widget_expanded %}
+{% spaceless %}
+<div {{ block('widget_container_attributes') }}>
+{% for child in form %}
+    <label class="{{ (multiple ? 'checkbox' : 'radio') ~ (inline is defined and inline ? ' inline' : '') }}">
+        {{ form_widget(child, {'attr': {'class': attr.widget_class|default('')}}) }}
+        {{ child.vars.label|trans({}, translation_domain) }}
+    </label>
+{% endfor %}
+</div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block monuments_content %}
+
+<style>
+    .correct {color: green; font-weight: bold; }
+    .error {color: red; font-weight: bold; }
+    .radio {font-size: 11px; }
+</style>
+
+{# form_theme form 'ApbMonumentsBundle::form.html.twig' #}
+
+<h1>Exercice > Identification des monuments</h1>
+
+<div class="row-fluid">
+    <div class="span12">
+        <h1>Identification des monuments</h1>
+        <form action="{{ path('apb_monuments_default_exercice') }}" method="POST">
+        <h2>Niveau {{ niveau }} (étape {{ count + 1 }}/ 9)</h2>
+        <strong>Identifiez le nom, le lieu et la datation du monument représenté sur cette image :</strong>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <br />
+        {% media monument.images.first.media, 'small' %}
+    </div>
+    <div class="span6">
+          <br />
+          <em><strong>Nom du monument</strong></em>
+        <br /><br />
+        {% if modalite == 1 %}
+            <textarea class="form" wrap="virtual" cols="40" rows="5" name="form[noms]" placeholder="Votre réponse ici...">{% if reponse_lieu != '' %}{{ reponse_utilisateur_nom }}{% endif %}</textarea>
+            {% if reponse_nom != '' %}<br /><span class="correct"><img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" />{{ reponse_nom }}</span>{% endif %}
+        {% endif %}
+        {% for nom in noms %}
+            <label class="radio"><input type="radio" name="form[noms]" value="{{ nom }}" {% if nom == reponse_utilisateur_nom %} checked{% endif %} {% if valider %} readonly {% endif %} />
+            {% if nom == reponse_nom %}
+                <span class="correct">{{ nom }} <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+            {% elseif nom == reponse_utilisateur_nom and reponse_nom != reponse_utilisateur_nom %}
+                <span class="error">{{ nom }} <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+            {% else %}
+                {{ nom }}
+            {% endif %}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        <em><strong>Lieu du monument</strong></em>
+        <br /><br />
+        {% if modalite == 1 %}
+            <textarea class="form" wrap="virtual" cols="40" rows="5" name="form[lieux]" placeholder="Votre réponse ici...">{% if reponse_lieu != '' %}{{ reponse_utilisateur_lieu }}{% endif %}</textarea>
+            {% if reponse_lieu != '' %}<br /><span class="correct"><img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" />{{ reponse_lieu }}</span>{% endif %}
+        {% endif %}
+        {% for lieu in lieux %}
+            <label class="radio"><input type="radio" name="form[lieux]" value="{{ lieu }}" {% if lieu == reponse_utilisateur_lieu %} checked{% endif %} {% if valider %} readonly {% endif %} />
+            {% if lieu == reponse_lieu %}
+                <span class="correct">{{ lieu }} <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+            {% elseif lieu == reponse_utilisateur_lieu and reponse_lieu != reponse_utilisateur_lieu %}
+                <span class="error">{{ lieu }} <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+            {% else %}
+                {{ lieu }}
+            {% endif %}
+            </label>
+        {% endfor %}
+    </div>
+    <div class="span6">
+        <em><strong>Datation du monument</strong></em>
+        <br /><br />
+        {% if modalite == 1 %}
+            <textarea class="form" wrap="virtual" cols="40" rows="5" name="form[dates]" placeholder="Votre réponse ici...">{% if reponse_lieu != '' %}{{ reponse_utilisateur_date }}{% endif %}</textarea>
+            {% if reponse_date != '' %}<br /><span class="correct"><img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" />{{ reponse_date }}</span>{% endif %}
+        {% endif %}
+        {% for date in dates %}
+            <label class="radio"><input type="radio" name="form[dates]" value="{{ date }}" {% if date == reponse_utilisateur_date %} checked{% endif %} {% if valider %} readonly {% endif %} />
+            {% if date == reponse_date %}
+                <span class="correct">{{ date }} <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+            {% elseif date == reponse_utilisateur_date and reponse_date != reponse_utilisateur_date %}
+                <span class="error">{{ date }} <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+            {% else %}
+                {{ date }}
+            {% endif %}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+        >> <a href="{{ path('apb_monuments_default_fiche', {'id': monument.id}) }}" target="_blank">Afficher la fiche complète du monument</a>
+    </div>
+    <div class="span6">
+        {% if reponse_nom == '' %}{{ form_end(form) }}{% endif %}
+        {% if reponse_nom != '' %}{{ form_rest(form_next) }}{{ form(form_next) }}{% endif %}
+    </div>
+</div>
+
+{% endblock %}

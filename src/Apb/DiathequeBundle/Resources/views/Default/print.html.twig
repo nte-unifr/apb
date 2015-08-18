@@ -1,0 +1,19 @@
+{# src/Apb/DiathequeBundle/Resources/views/Default/print.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% if titre is defined %}{{ titre }} - {% endif %}Diathèque - Université de Fribourg</title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <meta name="keywords" lang="fr" content="université, formation, suisse, fribourg, recherche, études" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  {% block stylesheets %}
+  {% endblock %}
+  {% block javascripts %}
+  {% endblock %}
+</head>
+
+<body>
+    {% block diatheque_content %}
+    {% endblock diatheque_content %}
+</body>
+</html>

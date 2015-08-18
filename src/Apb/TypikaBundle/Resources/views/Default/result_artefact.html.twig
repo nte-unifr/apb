@@ -1,0 +1,35 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/result_artefact.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>Result(s)</h1>
+<b>{{ artefacts|length }}</b> result(s)
+
+<div class="row-fluid">
+  <div class="span12">
+    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        {% set last_title = '' %}
+        {% for artefact in artefacts %}
+        {% if last_title != artefact.greek %}
+        <tr class="ficheTitle">
+          <td>{{ artefact.greek }}</td>
+        </tr>
+        {% endif %}
+        {% set last_title = artefact.greek %}
+        <tr>
+          <td>
+            <div class="resultEntry">
+              <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.context|striptags }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

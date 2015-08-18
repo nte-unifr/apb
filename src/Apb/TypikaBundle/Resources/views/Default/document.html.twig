@@ -1,0 +1,151 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/document.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<style>
+.ficheTitle {
+  font-weight: bold;
+  color: #006699;
+  background-color: #F0F6F9;
+}
+.ficheSubtitle {
+  margin-top: 10px;
+  color: #444444;
+  font-weight: bold;
+}
+</style>
+<h2>Typika&nbsp;&gt;&nbsp;<a href="{{ path('apb_typika_default_document', {'id': document.id}) }}">{{ document.nom }}</a>&nbsp;&gt;&nbsp;Details of document</h2>
+<br>
+<div align="center">
+  <h1>{{ document.nom }}</h1>
+
+  {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+      <strong>{{ app.user.username }}</strong>: <a href="{{ path('admin_apb_typika_document_edit', {'id': document.id}) }}" target="_blank">Editer la fiche </a>
+  {% endif %}
+
+</div>
+<br>
+<!--img src="images/document.jpg" alt="document" /-->
+<table cellpadding="3" align="center" class="ficheTable">
+	<tr class="ficheTitle">
+		<td>Name</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="ficheText">
+			    {{ document.nom }}
+			</div>
+		</td>
+	</tr>
+	<tr class="ficheTitle">
+		<td>Bibliographical reference</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="ficheText">
+				{{ document.biblio }}
+			</div>
+		</td>
+	</tr>
+	<tr class="ficheTitle">
+		<td>Issuing Authority</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="ficheText">
+				{{ document.authority }}
+			</div>
+		</td>
+	</tr>
+	<tr class="ficheTitle">
+		<td>Type of document</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="ficheText">
+				{{ document.type }}
+			</div>
+		</td>
+	</tr>
+	<tr class="ficheTitle">
+		<td>Date</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="ficheText">
+				{{ document.date }}
+			</div>
+		</td>
+	</tr>
+    <tr class="ficheTitle">
+      <td>Updated at</td>
+    </tr>
+    <tr>
+      <td>
+        <div class="ficheText">
+          {{ document.updatedAt|date() }}
+        </div>
+      </td>
+    </tr>
+</table>
+
+<div class="row-fluid" align="center">
+    <div class="span4">
+        {% if(prev) %}
+        <a href="{{ path('apb_typika_default_document', { 'id': prev }) }}">
+            <<<
+        </a>
+        {% else %}
+            <span style="color:#aaa"><<<</span>
+        {% endif %}
+    </div>
+    <div class="span4"><a href="{{ path('apb_typika_default_search') }}#results">Back to results</a></div>
+    <div class="span4">
+        {% if(next) %}
+        <a href="{{ path('apb_typika_default_document', { 'id': next }) }}">
+            >>>
+        </a>
+        {% else %}
+            <span style="color:#aaa">>>></span>
+        {% endif %}
+    </div>
+</div>
+
+    <hr />
+{% if artefacts|length > 0 %}
+    <h3><a name="related">Artefacts related to this document ({{ artefacts|length }}) [<a href="{{ path('apb_typika_default_document', {'id': document.id, 'relatedartefact': false}) }}#related">hide</a>]</h3>
+    <div class="row-fluid">
+      <div class="span12">
+        {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+        <table cellpadding="3" align="center" class="ficheTable">
+          <tbody>
+            {% set last_title = '' %}
+            {% for artefact in artefacts %}
+            {% if last_title != artefact.greek %}
+            <tr class="ficheTitle">
+              <td>{{ artefact.greek }}</td>
+            </tr>
+            {% endif %}
+            {% set last_title = artefact.greek %}
+            <tr>
+              <td>
+                <div class="resultEntry">
+                  <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.context|striptags }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+      </div>
+    </div>
+
+{% else %}
+<fieldset>
+	<h3><a name="related"><a href="{{ path('apb_typika_default_document', {'id': document.id, 'relatedartefact': true}) }}#related">Show all the artefacts related to this document</a></h3>
+</fieldset>
+{% endif %}
+<br />
+{% endblock %}

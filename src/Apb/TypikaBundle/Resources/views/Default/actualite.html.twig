@@ -1,0 +1,24 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/actualite.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<div align="center">
+  <h1>{{ actualite.title }}</h1>
+</div>
+
+<p><strong>
+    {{ actualite.date|date("d.m.Y") }} <br />
+    {{ actualite.introduction|raw }}
+</strong></p>
+
+<p>
+    {{ actualite.text|raw }}
+</p>
+
+<p align="right">
+    <br /><br />
+    <a href="{{ path('apb_typika_default_archives') }}">Archives</a>
+</p>
+
+{% endblock %}

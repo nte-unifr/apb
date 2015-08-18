@@ -1,0 +1,34 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/printresult.html.twig #}
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>{% if titre is defined %}{{ titre }} - {% endif %}Archéologie paléochrétienne et byzantine - Universit&eacute; de Fribourg</title>
+  <meta name="keywords" lang="fr" content="universit&eacute;, formation, suisse, fribourg, recherche, science, &eacute;tudes" />
+  <link rel="stylesheet" href="{{ asset('bundles/apbtypika/css/bootstrap.min.css') }}" type="text/css" media="screen" />
+  <style>
+    hr { margin: 0 0 5px 0;}
+  </style>
+</head>
+
+
+<body>
+  <div class="container-fluid">
+    <br />
+    {% for monument in monuments %}
+      <div class="row-fluid">
+        <div class="span6"><strong>Section</strong></div><div class="span6">{{ monument.section }}</div>
+      </div>
+      <div class="row-fluid">
+        <div class="span6"><strong>Monuments</strong></div><div class="span6">{{ monument.monuments }}</div>
+      </div>
+      <hr />
+    {% endfor %}
+
+    <input type="button" onclick="window.print()" value="Imprimer">
+    <br /><br />
+
+</div><!-- end:container -->
+</body>
+</html>

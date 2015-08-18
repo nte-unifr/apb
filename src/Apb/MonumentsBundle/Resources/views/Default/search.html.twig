@@ -1,0 +1,71 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends "ApbMonumentsBundle:Default:index.html.twig" %}
+
+{% block monuments_content %}
+
+<h1>Moteur de recherche</h1>
+
+
+<form id="dia_search" method="post" {{ form_enctype(form) }}>
+
+  <div align="left">
+    <h2>Entrez vos crit&egrave;res de recherche</h2>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Section</strong></div>
+    <div class="span10">{{ form_widget(form.section, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Chapitre</strong></div>
+    <div class="span10">{{ form_widget(form.chapitre, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Catégorie</strong></div>
+    <div class="span10">{{ form_widget(form.categorie, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Pays, Région</strong></div>
+    <div class="span10">{{ form_widget(form.pays, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Lieu</strong></div>
+    <div class="span10">{{ form_widget(form.lieu, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Iconographie</strong></div>
+    <div class="span10">{{ form_widget(form.iconographie, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span2"><strong>Monuments</strong></div>
+    <div class="span10">{{ form_widget(form.monuments, { 'attr': {'class': 'span10'} }) }}</div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span4"><strong>Comment combiner ces crit&egrave;res</strong></div>
+    <div class="span8">
+      <label class="radio inline">ET<input id="logic" type='radio' name='comb' value='et' checked="checked"></label>
+      <label class="radio inline"><input type='radio' name='comb' value='ou' >OU</label>
+    </div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span12">
+      <input type="submit" class="btn-primary btn span3" value="Chercher"/>
+    </div>
+  </div>
+
+  <div class="row-fluid navy">
+    <div class="span12">
+      <strong>Remarque</strong> : Dans les listes déroulantes, tapez les premi&egrave;res lettres de votre recherche pour retrouver plus rapidement votre information
+    </div>
+  </div>
+</form>
+{% endblock %}

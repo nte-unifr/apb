@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="apb.monuments.admin.Monument" class="Apb\MonumentsBundle\Admin\MonumentAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Monuments (fiches)" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Monument</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Categorie" class="Apb\MonumentsBundle\Admin\CategorieAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Categorie" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Categorie</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Chapitre" class="Apb\MonumentsBundle\Admin\ChapitreAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Chapitre" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Chapitre</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Iconographie" class="Apb\MonumentsBundle\Admin\IconographieAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Iconographie" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Iconographie</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Lieu" class="Apb\MonumentsBundle\Admin\LieuAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Lieu" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Lieu</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Pays" class="Apb\MonumentsBundle\Admin\PaysAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Pays" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Pays</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Section" class="Apb\MonumentsBundle\Admin\SectionAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Section" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Section</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.Monuments" class="Apb\MonumentsBundle\Admin\SectionAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Monuments" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Monuments</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.MonumentImages" class="Apb\MonumentsBundle\Admin\MonumentImagesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Images" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\MonumentImages</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="apb.monuments.admin.pages" class="Apb\MonumentsBundle\Admin\PagesAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Monuments" label="Monuments Pages" />
+            <argument />
+            <argument>Apb\MonumentsBundle\Entity\Pages</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+        </service>
+
+    </services>
+</container>

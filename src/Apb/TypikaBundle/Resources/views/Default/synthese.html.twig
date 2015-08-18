@@ -1,0 +1,157 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/synthese.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<style>
+.ficheTitle {
+  font-weight: bold;
+  color: #006699;
+  background-color: #F0F6F9;
+}
+.ficheSubtitle {
+  margin-top: 10px;
+  color: #444444;
+  font-weight: bold;
+}
+</style>
+<h2>Typika&nbsp;&gt;&nbsp;<a href="{{ path('apb_typika_default_synthese', {'id': synthese.id}) }}">{{ synthese.greek }}</a>&nbsp;&gt;&nbsp;Details of synthese</h2>
+<br>
+<div align="center">
+  <h1>{{ synthese.greek }}</h1>
+
+  {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+      <strong>{{ app.user.username }}</strong>: <a href="{{ path('admin_apb_typika_synthese_edit', {'id': synthese.id}) }}" target="_blank">Editer la fiche </a>
+  {% endif %}
+  
+</div>
+<br>
+<!--img src="images/synthese.jpg" alt="synthese" /-->
+			<table cellpadding="3" align="center" class="ficheTable">
+				<tr class="ficheTitle">
+					<td>Greek term</td>
+				</tr>			
+				<tr>
+					<td> 
+						<div class="ficheText">
+							{{ synthese.greek }}
+						</div>
+					</td>
+				</tr>			
+				<tr class="ficheTitle">
+					<td>French translation</td>
+				</tr>			
+				<tr>
+					<td> 
+						<div class="ficheText">
+							{{ synthese.french }}
+						</div>
+					</td>
+				</tr>		
+				<tr class="ficheTitle">
+					<td>English translation</td>
+				</tr>			
+				<tr>
+					<td> 
+						<div class="ficheText">
+							{{ synthese.english }}
+						</div>
+					</td>
+				</tr>		
+				<tr class="ficheTitle">
+					<td>Definition</td>
+				</tr>			
+				<tr>
+					<td> 
+						<div class="ficheText">
+							{{ synthese.definition|raw }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table style="width:100%;" cellspacing="5px" id="referenceList">
+							<tr>
+							{% for reference in synthese.references %}
+								<td style="width:10%;">
+								{% if reference.object is defined and reference.object != null %}
+								    [{{ reference.reference }}]</td><td  style="width:90%;"><a href="{{ path('apb_typika_default_' ~ reference.object, {'id': reference.idobject}) }}">{{ reference.text }}</a>
+								{% else %}
+								    [{{ reference.reference }}]</td><td  style="width:90%;">{{ reference.text }}
+								{% endif %}
+								</td></tr><tr>
+							{% endfor %}
+							</tr>
+						</table>
+					</td>
+				</tr>
+                <tr class="ficheTitle">
+                  <td>Updated at</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="ficheText">
+                      {{ synthese.updatedAt|date() }}
+                    </div>
+                  </td>
+                </tr>
+			</table>
+
+            <div class="row-fluid" align="center">
+                <div class="span4">
+                    {% if(prev) %}
+                    <a href="{{ path('apb_typika_default_synthese', { 'id': prev }) }}">
+                        <<<
+                    </a>
+                    {% else %}
+                        <span style="color:#aaa"><<<</span>
+                    {% endif %}
+                </div>
+                <div class="span4"><a href="{{ path('apb_typika_default_search') }}#results">Back to results</a></div>
+                <div class="span4">
+                    {% if(next) %}
+                    <a href="{{ path('apb_typika_default_synthese', { 'id': next }) }}">
+                        >>>
+                    </a>
+                    {% else %}
+                        <span style="color:#aaa">>>></span>
+                    {% endif %}
+                </div>
+            </div>
+                <hr />
+            {% if artefacts|length > 0 %}
+                <h3><a name="related">Artefacts related to this synthesis ({{ artefacts|length }}) [<a href="{{ path('apb_typika_default_synthese', {'id': synthese.id, 'relatedartefact': false}) }}#related">hide</a>]</h3>
+                <div class="row-fluid">
+                  <div class="span12">
+                    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+                    <table cellpadding="3" align="center" class="ficheTable">
+                      <tbody>
+                        {% set last_title = '' %}
+                        {% for artefact in artefacts %}
+                        {% if last_title != artefact.greek %}
+                        <tr class="ficheTitle">
+                          <td>{{ artefact.greek }}</td>
+                        </tr>
+                        {% endif %}
+                        {% set last_title = artefact.greek %}
+                        <tr>
+                          <td>
+                            <div class="resultEntry">
+                              <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.context|striptags }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})</a>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_allartefacts' }) }}{% endif %}
+                  </div>
+                </div>
+
+            {% else %}
+            <fieldset>
+	            <h3><a name="related"><a href="{{ path('apb_typika_default_synthese', {'id': synthese.id, 'relatedartefact': true}) }}#related">Show all the artefacts related to this synthesis</a></h3>
+            </fieldset>
+            {% endif %}
+<br />
+{% endblock %}

@@ -1,0 +1,30 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/fiche.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>{{ documents|length }} result(s)</h1>
+
+<div class="row-fluid">
+  <div class="span12">
+    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_alldocuments' }) }}{% endif %}
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        {% for document in documents %}
+        <tr class="ficheTitle">
+          <td>{{ document.nom }}</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="resultEntry">
+              <a href="{{ path('apb_typika_default_document', {'id': document.id}) }}"><b>no. {{ document.id }}</b> - {{ document.biblio }}</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if pager is defined and pager.haveToPaginate %}{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_alldocuments' }) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/searchresult.html.twig #}
+
+{% extends "ApbMonumentsBundle:Default:index.html.twig" %}
+
+{% block monuments_content %}
+<h1>R&eacute;sultats de la recherche</h1>
+Pour votre recherche, il y a <b>{{ monuments|length }}</b> r&eacute;sultat(s)
+<form method="post" action="{{ path('apb_monuments_default_search', {'res': 'print'}) }}">
+  <input class="form2" type="submit" value="Version imprimable">
+</form>
+
+<div class="row-fluid">
+  <div class="span12">
+  {% for monument in monuments %}
+    <table cellpadding="3" border="0" width="95%" align="center">
+    <tbody><tr>
+      <td>
+        <table border="0" width="95%" cellpadding="3">
+          <tbody><tr>
+            <td width="20%"><strong>Fiche</strong></td>
+            <td>{{ monument.section }}</td>
+          </tr>
+          <tr>
+            <td><strong>Chapitre</strong></td>
+            <td>{{ monument.chapitre }}</td>
+          </tr>
+          <tr>
+            <td><strong>Catégorie</strong></td>
+            <td>{{ monument.categorie }}</td>
+          </tr>
+          <tr>
+            <td><strong>Monuments</strong></td>
+            <td>{{ monument.lieu }}</td>
+          </tr>
+          <tr>
+            <td><strong>Description</strong></td>
+            <td>{{ monument.monuments }}</td>
+          </tr>
+
+          <tr>
+            <td colspan="2"><a name="214" href="{{ path('apb_monuments_default_fiche', {'id': monument.id}) }}">détails de la fiche</a><hr /></td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>
+  </tbody></table>
+{% endfor %}
+  </div>
+</div>
+{% endblock %}

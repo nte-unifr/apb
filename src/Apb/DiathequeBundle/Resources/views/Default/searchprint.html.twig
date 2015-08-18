@@ -1,0 +1,35 @@
+{# src/Apb/DiathequeBundle/Resources/views/Default/searchprint.html.twig #}
+
+<html>
+<body>
+{% block diatheque_content %}
+
+<table border="0" width="60%">
+    <tr>
+        <td colspan="2">
+        <h1>Version imprimable des résultats</h1><br />
+        </td>
+    </tr>
+    {% for dia in dias %}
+    <tr>
+        <td width="25%"><strong>Fiche</strong></td>
+        <td>{{ dia.fiche }}</td>
+    </tr>
+    
+    <tr>
+        <td align="justify"><strong>Monument</strong></td>
+        <td>{{ dia.monument }}</td>
+    </tr>
+    
+    <tr>
+        <td align="justify"><strong>Description</strong></td>
+        <td>{{ dia.description }}</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    {% endfor %}
+
+{% endblock %}
+</body>
+</html>

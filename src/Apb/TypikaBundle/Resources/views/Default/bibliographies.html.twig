@@ -1,0 +1,103 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/bibliographies.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+
+<a name="top-source"></a>
+
+Sources - <a href="#top-bibliography">Bibliographies</a>
+
+<div class="row-fluid">
+  <div class="span12">
+    <h1>Sources</h1>
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        {% set last_title = '' %}
+        {% for source in sources %}
+        {% if last_title != source.entry|striptags|first %}
+            <a name="top-source"></a><a href="#ancre-source{{source.id}}">{% filter upper %}{{ source.entry|striptags|first|raw }}{% endfilter %}</a>&nbsp; &nbsp;
+        {% endif %}
+        {% set last_title = source.entry|striptags|first %}
+        {% endfor %}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            &nbsp; &nbsp;
+          </td>
+        </tr>
+
+        {% set last_title = '' %}
+        {% for source in sources %}
+        {% if last_title != source.entry|striptags|first %}
+        <tr class="ficheTitle">
+          <td colspan="3"><a name="ancre-source{{source.id}}"></a>{% filter upper %}{{ source.entry|striptags|first|raw }}{% endfilter %}</td>
+          <td><a href="#top-source">TOP</a></td>
+        </tr>
+        <tr>
+        {% endif %}
+        {% set last_title = source.entry|striptags|first %}
+          <td>
+            <p>
+              {{ source.entry|raw }}
+            </p>
+          </td>
+        </tr>
+        <tr>
+        {% if last_title != source.entry|striptags|first %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <br /><hr /><a name="top-bibliography"></a>
+    <a href="#top-source">Sources</a> - Bibliographies
+
+    <h1>Bibliographies</h1>
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        <tr class="ficheTitle">
+          <td colspan="4">
+        {% set last_title = '' %}
+        {% for bibliography in bibliographies %}
+        {% if last_title != bibliography.entry|striptags|first %}
+            <a href="#ancre-bibliography{{bibliography.id}}">{% filter upper %}{{ bibliography.entry|striptags|first|raw }}{% endfilter %}</a>&nbsp; &nbsp;
+        {% endif %}
+        {% set last_title = bibliography.entry|striptags|first %}
+        {% endfor %}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            &nbsp; &nbsp;
+          </td>
+        </tr>
+
+        {% set last_title = '' %}
+        {% for bibliography in bibliographies %}
+        {% if last_title != bibliography.entry|striptags|first %}
+        <tr class="ficheTitle">
+          <td colspan="3"><a name="ancre-bibliography{{bibliography.id}}"></a>{% filter upper %}{{ bibliography.entry|striptags|first|raw }}{% endfilter %}</td>
+          <td><a href="#top-bibliography">TOP</a></td>
+        </tr>
+        <tr>
+        {% endif %}
+        {% set last_title = bibliography.entry|striptags|first %}
+          <td>
+            <p>
+              {{ bibliography.entry|raw }}
+            </p>
+          </td>
+        </tr>
+        <tr>
+        {% if last_title != bibliography.entry|striptags|first %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

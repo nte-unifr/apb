@@ -1,0 +1,71 @@
+{# src/Apb/MonumentsBundle/Resources/views/Default/exerciceresults.html.twig #}
+
+{% extends "ApbMonumentsBundle:Default:index.html.twig" %}
+
+{% block monuments_content %}
+
+<style>
+    .correct {color: green; font-weight: bold; }
+    .error {color: red; font-weight: bold; }
+    .right {text-align: right;}
+</style>
+
+<h1>Exercice > Résultats</h1>
+
+<div class="row-fluid">
+{% for monument in monuments %}
+<div class="row-fluid">
+  <div class="span6">
+    <strong>{{ loop.index }}.
+    <u>Vos réponses</u>:<br /></strong>
+    Nom -> {% if attribute(reponses, loop.index-1) is defined and 2 == modalite %} 
+                {% if attribute(reponses, loop.index-1).reponses.nom == monument.monuments.name %}
+                    <span class="correct">{{ attribute(reponses, loop.index-1).reponses.nom }}
+                    <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+                {% else %}
+                    <span class="error">{{ attribute(reponses, loop.index-1).reponses.nom }}
+                    <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+                {% endif %}
+            {% else %}
+                {{ attribute(reponses, loop.index-1).reponses.nom }}
+            {% endif %} <br />
+    Lieu -> {% if attribute(reponses, loop.index-1) is defined and 2 == modalite %}
+                {% if attribute(reponses, loop.index-1).reponses.lieu == monument.lieu.name %}
+                    <span class="correct">{{ attribute(reponses, loop.index-1).reponses.lieu }} 
+                    <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+                {% else %}
+                    <span class="error">{{ attribute(reponses, loop.index-1).reponses.lieu }} 
+                    <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+                {% endif %}
+            {% else %}
+                {{ attribute(reponses, loop.index-1).reponses.lieu }}
+            {% endif %} <br />
+    Date -> {% if attribute(reponses, loop.index-1) is defined and 2 == modalite %}
+                {% if attribute(reponses, loop.index-1).reponses.date == monument.date %}
+                    <span class="correct">{{ attribute(reponses, loop.index-1).reponses.date }} 
+                    <img src="{{ asset('bundles/apbmonuments/images/button_ok.jpg') }}" /></span>
+                {% else %}
+                    <span class="error">{{ attribute(reponses, loop.index-1).reponses.date }} 
+                    <img src="{{ asset('bundles/apbmonuments/images/cross.jpg') }}" /></span>
+                {% endif %}
+            {% else %}
+                {{ attribute(reponses, loop.index-1).reponses.date }}
+            {% endif %}
+  </div>
+  <div class="span6">
+    <u><strong>Solutions</strong></u>:<br />
+    Nom - > {{ monument.monuments.name }}<br />
+    Lieu -> {{ monument.lieu.name }}<br />
+    Date -> {{ monument.date }}<br /><br />
+    >> <a href="{{ path('apb_monuments_default_fiche', {'id': monument.id}) }}" target="_blank">Fiche détaillée du monument</a>
+  </div>
+  <div class="span12">
+    <hr />
+  </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="right"><a href=" #" onClick=" window.print()" >Imprimer la page</a></div>
+
+{% endblock %}

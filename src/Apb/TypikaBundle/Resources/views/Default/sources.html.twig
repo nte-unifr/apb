@@ -1,0 +1,52 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/sources.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+<h1>sources</h1>
+
+<div class="row-fluid">
+  <div class="span12">
+    <table cellpadding="3" align="center" class="ficheTable">
+      <tbody>
+        {% set last_title = '' %}
+        {% for source in sources %}
+        {% if last_title != source.entry|striptags|first %}
+            <a name="top"></a><a href="#ancre{{source.id}}">{% filter upper %}{{ source.entry|striptags|first|raw }}{% endfilter %}</a>&nbsp; &nbsp;
+        {% endif %}
+        {% set last_title = source.entry|striptags|first %}
+        {% endfor %}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            &nbsp; &nbsp;
+          </td>
+        </tr>
+
+        {% set last_title = '' %}
+        {% for source in sources %}
+        {% if last_title != source.entry|striptags|first %}
+        <tr class="ficheTitle">
+          <td colspan="3"><a name="ancre{{source.id}}"></a>{% filter upper %}{{ source.entry|striptags|first|raw }}{% endfilter %}</td>
+          <td><a href="#top">TOP</a></td>
+        </tr>
+        <tr>
+        {% endif %}
+        {% set last_title = source.entry|striptags|first %}
+          <td>
+            <p>
+              {{ source.entry|raw }}
+            </p>
+          </td>
+        </tr>
+        <tr>
+        {% if last_title != source.entry|striptags|first %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

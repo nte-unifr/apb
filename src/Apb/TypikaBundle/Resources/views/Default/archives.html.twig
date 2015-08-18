@@ -1,0 +1,19 @@
+{# src/Apb/TypikaBundle/Resources/views/Default/archives.html.twig #}
+
+{% extends "ApbTypikaBundle:Default:index.html.twig" %}
+
+{% block typika_content %}
+
+    <h1>Archives</h1>
+
+    <ul>
+    {% for actualite in actualites %}
+        <h3>{{ actualite.date|date("d.m.Y") }}</h3>
+        <a href="{{ path('apb_typika_default_actualite', {'id': actualite.id}) }}">{{ actualite.title }}</a>
+        {{ actualite.introduction|raw }}
+    {% endfor %}
+    </ul>
+
+    {% if pager is defined and pager.haveToPaginate %}<hr />{{ pagerfanta(pager, 'my_view_1', {'routeName': 'apb_typika_default_archives' }) }}{% endif %}
+
+{% endblock %}

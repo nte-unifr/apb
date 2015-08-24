@@ -56,7 +56,7 @@ class SyntheseAdmin extends Admin
             ->add('greek')
             ->add('french')
             ->add('english')
-            ->add('definition')
+            ->add('definition', null, array('attr' => array('class' => 'ckeditor')))
             ->with('References')
                 ->add('references','sonata_type_collection', array('by_reference' => false, 'required' => false), array(
                         'edit' => 'inline',

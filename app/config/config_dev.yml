@@ -34,4 +34,4 @@ assetic:
 sonata_media:
     cdn:
         server:
-            path: /apb/web/uploads/media # http://media.sonata-project.org/
+             path: /uploads/media

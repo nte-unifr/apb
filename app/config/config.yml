@@ -18,8 +18,8 @@ framework:
     default_locale:  "%locale%"
     trusted_proxies: ~
 #    session:         ~
-    session:        
-        save_path: /home/sessions #%kernel.root_dir%/var/sessions
+    session:
+        save_path: %kernel.root_dir%/var/sessions
 
     fragments:       ~
 
@@ -190,9 +190,6 @@ sonata_media:
 
             formats:
                 thumb: { height: 80 , quality: 70 }
-    cdn:
-        server:
-            path: /apb/uploads/media # http://media.sonata-project.org/
     filesystem:
         local:
             directory:  %kernel.root_dir%/../web/uploads/media
@@ -210,7 +207,7 @@ sonata_doctrine_orm_admin:
 
 
 services:
-    pagerfanta.view.my_view_1: 
+    pagerfanta.view.my_view_1:
         class: Pagerfanta\View\OptionableView
         arguments:
             - @pagerfanta.view.default

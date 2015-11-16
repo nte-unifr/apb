@@ -321,6 +321,8 @@ class DefaultController extends Controller
                         break;
                     case 'document':
                     case 'material':
+                        $op = '= '.$value[$i].' OR a.material_2 ='.$value[$i].' OR a.material_3 =';
+                        break;
                     case 'id':
                     case 'french':
                     case 'english':

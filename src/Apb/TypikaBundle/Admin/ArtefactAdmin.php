@@ -67,7 +67,7 @@ class ArtefactAdmin extends Admin
                     'inline' => 'table',
                 ))
             ->add('document', 'sonata_type_model', array('empty_value' => '---'))
-            ->add('category', 'sonata_type_model', array('empty_value' => '---'))
+            ->add('category', 'sonata_type_model', array('empty_value' => '---', 'required' => false))
             ->add('material', 'sonata_type_model', array('empty_value' => '---', 'required' => false))
             ->add('material_2', 'sonata_type_model', array('empty_value' => '---', 'required' => false))
             ->add('material_3', 'sonata_type_model', array('empty_value' => '---', 'required' => false))

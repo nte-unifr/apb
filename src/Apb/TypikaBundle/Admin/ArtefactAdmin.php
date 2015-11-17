@@ -115,6 +115,9 @@ class ArtefactAdmin extends Admin
             ->add('greek_trans')
             ->add('french')
             ->add('english')
+            ->add('material')
+            ->add('material_2')
+            ->add('material_3')
         ;
     }
 }

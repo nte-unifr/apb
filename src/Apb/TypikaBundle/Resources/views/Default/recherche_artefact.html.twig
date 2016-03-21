@@ -47,7 +47,7 @@ var documents = function(id, value) {
   select = '<select class="form" name="document_'+(id)+'" style="width:100%">';
   {% for doc in document %}
   select = select + '<option value="{{ doc.id }}"';
-  if(value == '{{doc.id}}') { 
+  if(value == '{{doc.id}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ doc.nom }}</option>';
@@ -60,7 +60,7 @@ var greek = function(id, value) {
   select = '<select class="form" name="greek_'+(id)+'" style="width:100%">';
   {% for gr in greek %}
   select = select + '<option value="{{ gr.nom }}"';
-  if(value == '{{gr.nom}}') { 
+  if(value == '{{gr.nom}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ gr.nom }}</option>';
@@ -73,7 +73,7 @@ var greek_trans = function(id, value) {
   select = '<select class="form" name="greektrans_'+(id)+'" style="width:100%">';
   {% for grtr in greek_trans %}
   select = select + '<option value="{{ grtr.nom }}"';
-  if(value == '{{grtr.nom}}') { 
+  if(value == '{{grtr.nom}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ grtr.nom }}</option>';
@@ -86,7 +86,7 @@ var french = function(id, value) {
   select = '<select class="form" name="french_'+(id)+'" style="width:100%">';
   {% for fre in french %}
   select = select + '<option value="{{ fre.nom }}"';
-  if(value == '{{fre.nom}}') { 
+  if(value == '{{fre.nom}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ fre.nom }}</option>';
@@ -99,7 +99,7 @@ var english = function(id, value) {
   select = '<select class="form" name="english_'+(id)+'" style="width:100%">';
   {% for eng in english %}
   select = select + '<option value="{{ eng.nom }}"';
-  if(value == '{{eng.nom}}') { 
+  if(value == '{{eng.nom}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ eng.nom }}</option>';
@@ -112,7 +112,7 @@ var categories = function(id, value) {
   select = '<select class="form" id="category_'+(id)+'" name="category_'+(id)+'" style="width:100%" onchange="subcategories(\''+id+'\');">';
   {% for cat in categories %}
   select = select + '<option value="{{ cat.nom }}"';
-  if(value == '{{cat.nom}}') { 
+  if(value == '{{cat.nom}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ cat.nom }}</option>';
@@ -135,7 +135,7 @@ var subcategories_options = function(id, value, pos) {
       {% if subcategories[p] is defined %}
         {% for cat in (subcategories[p]) %}
               options = options + '<option value="{{ cat.nom }}"';
-              if(value == '{{cat.nom}}') { 
+              if(value == '{{cat.nom}}') {
                 options = options + ' selected="selected"';
               }
               options = options + '>{{ cat.nom }}</option>';
@@ -153,7 +153,7 @@ var materials = function(id, value) {
   select = '<select class="form" name="material_'+(id)+'" style="width:100%">';
   {% for mat in materials %}
   select = select + '<option value="{{ mat.id }}"';
-  if(value == '{{mat.id}}') { 
+  if(value == '{{mat.id}}') {
     select = select + ' selected="selected"';
   }
   select = select + '>{{ mat.nom }}</option>';
@@ -499,7 +499,9 @@ function subcategories(id) {
             <tr>
               <td>
                 <div class="resultEntry">
-                  <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">{{ artefact.context|striptags }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})</a>
+                  <a href="{{ path('apb_typika_default_artefact', {'id': artefact.id}) }}">
+                    {{ artefact.context|striptags('&nbsp;')|raw }} - {{ artefact.document.nom }} - (ref. {{ artefact.reference }})
+                  </a>
                 </div>
               </td>
             </tr>

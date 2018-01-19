@@ -49,3 +49,4 @@
 /.bundle/*
 
 .DS_Store
+/log

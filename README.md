@@ -1,4 +1,3 @@
 # Apb
 
-## Documentation
-http://nte.unifr.ch/ntedoc/projets/apb/
+Instruments of work for researchers and students interested in the Paleochristian and Byzantine world
